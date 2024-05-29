@@ -8,60 +8,95 @@
 
              if (tabla)  tabla.remove();
                     
-        google.script.run.withSuccessHandler(
-            function (obj) {
-
-                
-                
-                tabla = document.createElement('table');
-                tabla.id = 'tablaContactos';
-                
-                let tablaHeader = document.createElement('thead');
-                let tablaBody = document.createElement('tbody');
-
-                /* Generacion de una tabla a traves de un doble bucle For */
-                for (let index = 0; index < obj.length; index++) {
-
-                     let fila = document.createElement('tr');
-                     for (let numcel = 0; numcel < obj[index].length; numcel++) {
-                        let celda = document.createElement('td');
-                         celda.textContent = obj[index][numcel];
-                         fila.appendChild(celda);
-                        
-                     }
-                     if (index == 0) {
-                          tablaHeader.appendChild(fila);
-                          tabla.appendChild(tablaHeader);
-                          
-                      }
-                      else{   
-                          tablaBody.appendChild(fila);
-                      }
-                    
-                }
-                //Array.from(obj).forEach((filaActual, i) => {
-                //    let fila = document.createElement('tr');
-                //    filaActual.forEach(celdaActual => {
-                //        let celda = document.createElement('td');
-                //        celda.textContent = celdaActual;
-                //        fila.appendChild(celda);
-                //       /*  celda.classList.add("py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3") */
-                //    });
-                //    if (i == 0) {
-                //        tablaHeader.appendChild(fila);
-                //        tabla.appendChild(tablaHeader);
-                //        
-                //    }
-                //    else{
-//
-                //        tablaBody.appendChild(fila);
-                //    }
-                //});
-                tablaHeader.classList.add('table-dark');
-                tabla.appendChild(tablaBody);
-                tabla.classList.add('table', 'table-striped', 'border-3', 'table-secondary');
-                document.getElementById('divContactos').appendChild(tabla);
-            }
-        ).obtenerContactos();
+        google.script.run
+        .withSuccessHandler(crearTablaContactosCorrectamente)
+        .withFailuredHandler(crearTablaContactosError)
+        .obtenerContactos();
     }
+
+
+    function crearTablaContactosCorrectamente(obj) {
+  
+     tabla = document.createElement('table');
+     tabla.id = 'tablaContactos';
+     
+     let tablaHeader = document.createElement('thead');
+     let tablaBody = document.createElement('tbody');
+     
+     // Identificar el encabezado de la tabla 
+     let primeraFila = document.createElement('tr');
+     for (let enca = 0; enca < obj[0].length; enca++) {
+         let celda = document.createElement('td');
+         celda.textContent = obj[0][enca];
+         primeraFila.appendChild(celda);
+         
+     }
+       tablaHeader.appendChild(primeraFila);
+       tabla.appendChild(tablaHeader);
+     
+     /* Generacion de una tabla a traves de un doble bucle For */
+     for (let index = 1; index < obj.length; index++) {
+     
+          let fila = document.createElement('tr');
+          for (let numcel = 0; numcel < obj[index].length; numcel++) {
+             let celda = document.createElement('td');
+              celda.textContent = obj[index][numcel];
+              fila.appendChild(celda);
+             
+          }
+          
+               tablaBody.appendChild(fila);
+         
+     }
+     //Array.from(obj).forEach((filaActual, i) => {
+     //    let fila = document.createElement('tr');
+     //    filaActual.forEach(celdaActual => {
+     //        let celda = document.createElement('td');
+     //        celda.textContent = celdaActual;
+     //        fila.appendChild(celda);
+     //       /*  celda.classList.add("py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3") */
+     //    });
+     //    if (i == 0) {
+     //        tablaHeader.appendChild(fila);
+     //        tabla.appendChild(tablaHeader);
+     //        
+     //    }
+     //    else{
+     //
+     //        tablaBody.appendChild(fila);
+     //    }
+     //});
+     tablaHeader.classList.add('table-dark');
+     tabla.appendChild(tablaBody);
+     tabla.classList.add('table', 'table-striped', 'border-3', 'table-secondary');
+     document.getElementById('divContactos').appendChild(tabla);
+
+     // mostrar notificacion de Ok
+        crearNotificacion(1, 'Contactos obtenidos correctamente', 'Todo en orden');
+     }
+
+     function crearTablaContactosError() {
+        //  Mostrar notificacion de Error
+     }
+
+     function crearNotificacion(tipo, mensaje, titulo) {
+        //Obtener Datos
+        let mensajeNotificacion = document.getElementById('mensajeNotificacion');
+        let tituloNotificacion = document.getElementById('tituloNotificacion');
+        let elementoNotificacion = document.getElementById('notificacion');
+        let iconoNotificacion = document.getElementById('iconoNotificacion');
+        let notificacion =  bootstrap.Toast.getOrCreateInstance(elementoNotificacion);
+
+        //Editar Notificacion
+        iconoNotificacion.className = '';
+        iconoNotificacion.classList.add('bi', 'bi-check2-squere');
+        mensajeNotificacion.textContent = mensaje;
+        tituloNotificacion.textContent = titulo;
+        elementoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--color-verde-oscuro');
+
+        //Mostrar notificacion
+        notificacion.show();
+     }
+
 </script>
+  
