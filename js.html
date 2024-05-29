@@ -3,33 +3,63 @@
     
 
     function crearTablaContactos() {
+        
+          let tabla = document.getElementById('tablaContactos');
+
+             if (tabla)  tabla.remove();
+                    
         google.script.run.withSuccessHandler(
             function (obj) {
-                let tabla = document.createElement('table');
+
+                
+                
+                tabla = document.createElement('table');
+                tabla.id = 'tablaContactos';
+                
                 let tablaHeader = document.createElement('thead');
                 let tablaBody = document.createElement('tbody');
 
-                Array.from(obj).forEach((filaActual, i) => {
-                    let fila = document.createElement('tr');
-                    filaActual.forEach(celdaActual => {
-                        let celda = document.createElement('td');
-                        celda.textContent = celdaActual;
-                        fila.appendChild(celda);
-                       /*  celda.classList.add("py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3") */
-                    });
-                    if (i == 0) {
-                        tablaHeader.appendChild(fila);
-                        tabla.appendChild(tablaHeader);
-                        
-                    }
-                    else{
+                /* Generacion de una tabla a traves de un doble bucle For */
+                for (let index = 0; index < obj.length; index++) {
 
-                        tablaBody.appendChild(fila);
-                    }
-                });
+                     let fila = document.createElement('tr');
+                     for (let numcel = 0; numcel < obj[index].length; numcel++) {
+                        let celda = document.createElement('td');
+                         celda.textContent = obj[index][numcel];
+                         fila.appendChild(celda);
+                        
+                     }
+                     if (index == 0) {
+                          tablaHeader.appendChild(fila);
+                          tabla.appendChild(tablaHeader);
+                          
+                      }
+                      else{   
+                          tablaBody.appendChild(fila);
+                      }
+                    
+                }
+                //Array.from(obj).forEach((filaActual, i) => {
+                //    let fila = document.createElement('tr');
+                //    filaActual.forEach(celdaActual => {
+                //        let celda = document.createElement('td');
+                //        celda.textContent = celdaActual;
+                //        fila.appendChild(celda);
+                //       /*  celda.classList.add("py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3") */
+                //    });
+                //    if (i == 0) {
+                //        tablaHeader.appendChild(fila);
+                //        tabla.appendChild(tablaHeader);
+                //        
+                //    }
+                //    else{
+//
+                //        tablaBody.appendChild(fila);
+                //    }
+                //});
                 tablaHeader.classList.add('table-dark');
                 tabla.appendChild(tablaBody);
-                tabla.classList.add('table', 'border', 'border-3');
+                tabla.classList.add('table', 'table-striped', 'border-3', 'table-secondary');
                 document.getElementById('divContactos').appendChild(tabla);
             }
         ).obtenerContactos();
