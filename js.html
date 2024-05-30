@@ -10,10 +10,11 @@
                     
         google.script.run
         .withSuccessHandler(crearTablaContactosCorrectamente)
-        .withFailuredHandler(crearTablaContactosError)
+        .withFailureHandler(crearTablaContactosError)
         .obtenerContactos();
     }
 
+   
 
     function crearTablaContactosCorrectamente(obj) {
   
@@ -89,7 +90,7 @@
 
         //Editar Notificacion
         iconoNotificacion.className = '';
-        iconoNotificacion.classList.add('bi', 'bi-check2-squere');
+        iconoNotificacion.classList.add('bi', 'bi-check-square');
         mensajeNotificacion.textContent = mensaje;
         tituloNotificacion.textContent = titulo;
         elementoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--color-verde-oscuro');
